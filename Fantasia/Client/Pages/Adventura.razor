@@ -1,0 +1,94 @@
+﻿@page "/adventura"
+@inject IPostavaService PostavaService
+@inject IUtokyService UtokyService
+@inject IBojService BojService
+@inject NavigationManager NavigationManager
+@inject HideNavBar HideNavBar
+@attribute [Authorize]
+
+@if (postava != null)
+{
+    <div id="stredny">
+        <div id="priehladny"></div>
+        <div class="obrazok" style="background-image: url(@postava.Image)"></div>
+        <div class="statySchopnosti">
+            <h1>SCHOPNOSTI</h1>
+            <div class="pouzivaneSchopnosti">
+                <img id="fyzImg" src="@fyzUtok.FyzImageUrl" alt="@fyzUtok.NazovFyzUtoku" style="min-width: 60px">
+                <img id="magImg" src="@magUtok.MagImageUrl" alt="@magUtok.NazovMagUtoku" style="min-width: 60px">
+                <img id="vieImg" src="@vieUtok.VieImageUrl" alt="@vieUtok.NazovVieUtoku" style="min-width: 60px">
+            </div>
+        </div>
+        <div class="statySchopnosti">
+            <h1>SCHOPNOSTI</h1>
+            <div class="pouzivaneSchopnosti"></div>
+        </div>
+        <div class="statyAdventura">
+            <h1>ADVENTURA</h1>
+            <div class="scrollmenu scrollmenu2">
+                <img src="/images/adventura800.png" alt="adventura" usemap="#workmap">
+                <map name="workmap">
+                    <area @onclick="()=>ClickBoj(1)" class="pointer" shape="rect" coords="208,54,241,83">
+                    <area @onclick="()=>ClickBoj(2)" class="pointer" shape="rect" coords="103,119,134,151">
+                    <area @onclick="()=>ClickBoj(3)" class="pointer" shape="rect" coords="263,135,297,164">
+                    <area @onclick="()=>ClickBoj(4)" class="pointer" shape="rect" coords="189,230,222,260">
+                    <area @onclick="()=>ClickBoj(5)" class="pointer" shape="rect" coords="118,300,150,330">
+                    <area @onclick="()=>ClickBoj(6)" class="pointer" shape="rect" coords="287,358,318,387">
+                    <area @onclick="()=>ClickBoj(7)" class="pointer" shape="rect" coords="87,403,120,433">
+                    <area @onclick="()=>ClickBoj(8)" class="pointer" shape="rect" coords="161,477,193,507">
+                    <area @onclick="()=>ClickBoj(9)" class="pointer" shape="rect" coords="412,88,444,117">
+                    <area @onclick="()=>ClickBoj(10)" class="pointer" shape="rect" coords="514,216,546,246">
+                    <area @onclick="()=>ClickBoj(11)" class="pointer" shape="rect" coords="608,51,641,82">
+                    <area @onclick="()=>ClickBoj(12)" class="pointer" shape="rect" coords="612,219,645,247">
+                    <area @onclick="()=>ClickBoj(13)" class="pointer" shape="rect" coords="621,315,651,344">
+                    <area @onclick="()=>ClickBoj(14)" class="pointer" shape="rect" coords="419,357,450,482">
+                    <area @onclick="()=>ClickBoj(15)" class="pointer" shape="rect" coords="513,462,539,490">
+                    <area @onclick="()=>ClickBoj(16)" class="pointer" shape="rect" coords="665,376,696,406">
+                </map>
+            </div>
+        </div>
+    </div>
+}
+@code {
+    Fantasia.Shared.Postava? postava = null;
+    FyzUtoky? fyzUtok = null;
+    MagUtoky? magUtok = null;
+    VieUtoky? vieUtok = null;
+    VytvorBoj? vytvorBoj = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        postava = await PostavaService.GetPostava();
+        fyzUtok = await UtokyService.GetFyzUtok(postava.FyzUtokyId);
+        magUtok = await UtokyService.GetMagUtok(postava.MagUtokyId);
+        vieUtok = await UtokyService.GetVieUtok(postava.VieUtokyId);
+        var result = await BojService.GetBoj(postava.Id);
+        if (result.Success)
+        {
+            NavigationManager.NavigateTo("/bojPage");
+            await ToggleNavbarAsync();
+        }
+    }
+
+    private async Task ToggleNavbarAsync()
+    {
+        await HideNavBar.ToggleNavbarAsync();
+    }
+
+    private void ClickBoj(int obtiaznost)
+    {
+        SpustiBoj(obtiaznost);
+    }
+
+    private async Task SpustiBoj(int obtiaznost)
+    {
+        vytvorBoj = new VytvorBoj { Id = postava.Id, Obtiaznost = obtiaznost };
+        var result = await BojService.VytvorBoj(vytvorBoj);
+        if (result.Success)
+        {
+            NavigationManager.NavigateTo("/bojPage");
+            ToggleNavbarAsync();
+        }
+    }
+
+}

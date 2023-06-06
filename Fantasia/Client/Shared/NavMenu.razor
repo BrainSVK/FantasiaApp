@@ -1,0 +1,79 @@
+﻿@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject ILocalStorageService LocalStorage
+@inject NavigationManager NavigationManager
+@inject IAuthService AuthService
+@inject HideNavBar HideNavBar
+
+
+<nav class="n navbar-dark" style="@(NavbarVisibility ? "display: block;" : "display: none;")">
+    <ul id='nav-bar'>
+        <input type='checkbox' id='check' />
+        <span class="menu">
+                <li><a href="/">O hre</a></li>
+                <AuthorizeView>
+                    <Authorized>
+                        <li><a href="profil">Profil</a></li>
+                        <li><a href="" @onclick="Logout" >Odhlasiť sa</a></li>
+                        <li><a href="" @onclick="Vymaz" >Vymazať účet</a></li>
+                    </Authorized>
+                    <NotAuthorized>
+                        <li><a href="login">Prihlasiť sa</a></li>
+                        <li><a href="registracia">Registrovať sa</a></li>
+                    </NotAuthorized>
+                </AuthorizeView>
+                <label for="check" class="close-menu navbar-toggler" style="background: black">
+                    <span class="navbar-toggler-icon"></span>
+                </label>
+        </span>
+        <label for="check" class="open-menu navbar-toggler" style="background: black">
+                    <span class="navbar-toggler-icon"></span>
+        </label>
+    </ul>
+</nav>
+
+@code {
+
+
+    private async Task Logout()
+    {
+        await LocalStorage.RemoveItemAsync("authToken");
+        await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        NavigationManager.NavigateTo("");
+    }
+
+    private async Task Vymaz()
+    {
+        await AuthService.VymazHraca();
+        await LocalStorage.RemoveItemAsync("authToken");
+        await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        NavigationManager.NavigateTo("");
+    }
+
+    private bool NavbarVisibility { get; set; } = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        HideNavBar.NavbarUpdated += HandleNavbarUpdated;
+    }
+
+    private void HandleNavbarUpdated(object sender, string visibility)
+    {
+        if (NavbarVisibility == true)
+        {
+            NavbarVisibility = visibility == "none";
+            InvokeAsync(StateHasChanged);
+            NavbarVisibility = false;
+        }
+        else
+        {
+            NavbarVisibility = visibility == "block";
+            InvokeAsync(StateHasChanged);
+            NavbarVisibility = true;
+        }
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        HideNavBar.NavbarUpdated -= HandleNavbarUpdated;
+    }
+}

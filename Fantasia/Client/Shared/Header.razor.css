@@ -1,0 +1,56 @@
+﻿header {
+    position: absolute;
+    top: 150px;
+    left: 50%;
+    width: 80%;
+    display: flex;
+    transform: translate(-50%, -50%);
+    justify-content: space-around;
+    align-items: center;
+    padding: 0 0;
+}
+
+header .navigation {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin: 10px 10px;
+    padding: 0;
+}
+
+    header .navigation li {
+        list-style: none;
+        margin: 0 10px;
+        opacity: 0.8;
+    }
+
+        header .navigation li:hover {
+            opacity: 1;
+        }
+
+        .header .navigation img {
+            width: 130px;
+        }
+
+
+        header .navigation img:hover {
+            animation: rotation 1s;
+        }
+
+    header .navigation h1 {
+        font-size: 20px;
+        color: white;
+        text-align: center;
+    }
+
+@media (max-width: 640.98px) {
+    .imgs {
+        width: 100px;
+    }
+}
+
+@media (min-width: 641px) {
+    .imgs {
+        width: 130px;
+    }
+}

@@ -1,0 +1,138 @@
+﻿@page "/profil"
+@inject IAuthService AuthService
+@inject IPostavaService PostavaService
+@inject NavigationManager NavigationManager
+@attribute [Authorize]
+
+
+@if (hrac != null && postava != null)
+{
+ <div id="stredny">
+    <div id="priehladny"></div>
+    <div class="scrollmenu-hra">
+        <div class="napisNaStred">
+            <h>Profil</h>
+        </div>
+        <div class="stlpece">
+            <div class="stlpec">
+                <p>Informácie hráča:</p>
+                <p1>Nickname: @hrac.NickName <br></p1>
+                <EditForm Model="hracUpdate" OnValidSubmit="UpdateHrac">
+                <DataAnnotationsValidator></DataAnnotationsValidator>
+                <div class="forma">
+                    <div class="txt_field1">
+                        <input type="text" id="nickname" name="nickname" @bind-value="hracUpdate.NickName" required>
+                        <ValidationMessage For="@(() => hracUpdate.NickName)" />
+                        <label for="nickname">Nové meno</label>
+                    </div>
+                    @*<input class="submit1" type="submit" name="submit" value="Potvrdiť">*@
+                </div>
+                <p1>Email: @hrac.Email </p1>
+                <div class="forma">
+                    <div class="txt_field1">
+                        <input type="email" id="email" name="email" @bind-value="hracUpdate.Email" required>
+                        <ValidationMessage For="@(() => hracUpdate.Email)" />
+                        <label for="email">Nový email</label>
+                    </div>
+                    @*<input class="submit1" type="submit" name="submit" value="Potvrdiť">*@
+                </div>
+                <p1>Nové Heslo:</p1>
+                <div class="forma">
+                    <div class="txt_field1">
+                        <input type="password" id="password" name="password" @bind-value="hracUpdate.Password">
+                        <ValidationMessage For="@(() => hracUpdate.Password)" />
+                        @*<label for="password">Nové heslo</label>*@
+                    </div>
+                    <p1>Zopakuj Heslo:</p1>
+                    <div class="txt_field1">
+                        <input type="password" id="confirmpassword" name="confirmpassword" @bind-value="hracUpdate.ConfirmPassword">
+                        @*<label for="confirmpassword" >Zopakuj Heslo</label>*@
+                        <ValidationMessage For="@(() => hracUpdate.ConfirmPassword)" />
+                    </div>
+                    <input class="submit1" type="submit" name="submit" value="Potvrdiť">
+                </div>
+                <div class="@messageCssClass">
+                    <div><p5 class="errmess">@errorMessage</p5></div>
+                </div>
+                </EditForm>
+            </div>
+            <div class="stlpec">
+                <div class="napisNaStredStlpca">
+                    <h>Postava</h>
+                </div>
+                <div class="obrazokProfil" style="background-image: url(@postava.Image)"></div>
+                   <input class="submit2" onclick="@UpdatePostava" type="submit" name="submitVymaz" value="Zmen">
+            </div>
+        </div>
+    </div>
+</div>    
+
+}
+
+
+
+
+@code {
+    Hrac? hrac = null;
+    HracUpdate? hracUpdate = null;
+    Fantasia.Shared.Postava? postava = null;
+    Fantasia.Shared.PostavaUpdate? postavaU = new PostavaUpdate();
+    private string errorMessage = string.Empty;
+    string messageCssClass = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        hrac = await AuthService.GetHrac();
+        postava = await PostavaService.GetPostava();
+        postavaU.FyzickaSila = postava.FyzickaSila;
+        postavaU.MagickaSila = postava.MagickaSila;
+        postavaU.Viera = postava.Viera;
+        postavaU.Id = postava.Id;
+        postavaU.Image = postava.Image;
+        postavaU.Stamina = postava.Stamina;
+        postavaU.Vitalita = postava.Vitalita;
+        postavaU.Stastie = postava.Stastie;
+        postavaU.FyzUtokyId = postava.FyzUtokyId;
+        postavaU.VieUtokyId = postava.VieUtokyId;
+        postavaU.MagUtokyId = postava.MagUtokyId;
+        postavaU.VolneStaty = postava.VolneStaty;
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        hracUpdate = new HracUpdate { 
+                Id = hrac.Id,
+                NickName = hrac.NickName,
+                Email = hrac.Email
+        };
+    }
+
+    private async Task UpdatePostava()
+    {
+        postavaU.Image = "zmen";
+        var result = await PostavaService.UpdatePostava(postavaU);
+        if (result != null)
+        {
+            postava.Image = result.Data.Image;
+            NavigationManager.NavigateTo("/profil");
+        }
+    }
+
+    private async Task UpdateHrac()
+    {
+        var result = await AuthService.UpdateHrac(hracUpdate);
+        if (result.Success)
+        {
+            hrac.NickName = hracUpdate.NickName;
+            hrac.Email = hracUpdate.Email;
+            errorMessage = string.Empty;
+            NavigationManager.NavigateTo("/profil");
+        }
+        else
+        {
+            errorMessage = result.Message;
+            messageCssClass = "text-danger"; 
+        }
+    }
+
+}

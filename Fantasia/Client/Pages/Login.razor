@@ -1,0 +1,72 @@
+﻿@page "/login"
+@using Fantasia.Client.Services.AuthService;
+@using Microsoft.AspNetCore.WebUtilities
+@inject IAuthService AuthService
+@inject ILocalStorageService LocalStorage
+@inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<EditForm Model="hrac" OnValidSubmit="HandleLogin">
+    <DataAnnotationsValidator />
+    <div class="center l clog">
+        <h1>Prihlásiť</h1>
+        <div class="box-win">
+            <div class="scrollmenu-forma1">
+                <div class="txt_field">
+                    <input type="text" id="nickname" name="nickname" @bind-value="hrac.NickName" required>
+                    <ValidationMessage For="@(() => hrac.NickName)" />
+                    <label for="nickname">Nickname</label>
+                </div>
+                <div class="txt_field">
+                    <input type="password" id="password" name="password" @bind-value="hrac.Password" required>
+                    <ValidationMessage For="@(() => hrac.Password)" />
+                    <label for="password" >Heslo</label>
+                </div>
+                <div class="@messageCssClass">
+                    <div><p class="errmess">@errorMessage</p></div>
+                </div>
+            </div>
+            @*<div class="pass"> <a href="obnovaHesla">Zabudol si heslo?</a></div>*@
+            <input class="submit" type="submit" name="submit" value="Odoslat">
+            <div class="singup_link">
+                Nie si ešte registrovaný? <a href="registracia">Registrovať</a>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    private LoginModel hrac = new LoginModel();
+
+    private string errorMessage = string.Empty;
+
+    string messageCssClass = string.Empty;
+
+    private string returnUrl = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+        if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("returnUrl", out var url))
+        {
+            returnUrl = url;
+        }
+    }
+
+     private async Task HandleLogin()
+    {
+        var result = await AuthService.Login(hrac);
+        if (result.Success)
+        {
+            errorMessage = string.Empty;
+            await LocalStorage.SetItemAsync("authToken", result.Data);
+            await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            NavigationManager.NavigateTo(returnUrl);
+        }
+        else
+        {
+            errorMessage = result.Message;
+            messageCssClass = "text-danger";
+        }
+    }
+}

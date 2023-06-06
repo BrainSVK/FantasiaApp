@@ -1,0 +1,66 @@
+﻿@page "/registracia"
+@using Fantasia.Client.Services.AuthService;
+@using Fantasia.Shared;
+@inject NavigationManager NavigationManager;
+@inject IAuthService AuthService;
+
+
+<EditForm Model="hrac" OnValidSubmit="HandleRegistration">
+    <DataAnnotationsValidator />
+    <div class="center r creg">
+        <h1>Registrovať</h1>
+        <div class="box-win">
+                <div class="scrollmenu-forma">
+                      <div class="txt_field">
+                      <input type="text" name="nickname" id="nickname" @bind-value="hrac.NickName" required />
+                      <ValidationMessage For="@(() => hrac.NickName)" />
+                      <label for="nickname">Nickname</label>
+                      </div>
+                       <div class="txt_field">
+                      <input type="email" name="email" id="email" @bind-value="hrac.Email" required />
+                      <ValidationMessage For="@(() => hrac.Email)" />
+                      <label for="email">E-mail</label>
+                       </div>
+                       <div class="txt_field">
+                       <input type="password" name="password" id="password" @bind-value="hrac.Password" required />
+                       <ValidationMessage For="@(() => hrac.Password)" />
+                       <label for="password">Heslo</label>
+                       </div>
+                       <div class="txt_field">
+                       <input type="password" name="confirmpassword" id="confirmpassword" @bind-value="hrac.ConfirmPassword" required/>
+                       <ValidationMessage For="@(() => hrac.ConfirmPassword)" />
+                       <label for="confirmpassword">Zopakuj Heslo</label>
+                       </div>
+                </div>
+            <input class="submit" type="submit" name="submit" value="Odoslat">
+            <div class="@messageCssClass">
+            <div><p>@message</p></div>
+            </div>
+            <div class="singup_link">
+              Už si registrovaný? <a href="login">Prihlásiť</a>
+            </div>      
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    RegisterModel hrac = new RegisterModel();
+
+    string message = string.Empty;
+    string messageCssClass = string.Empty;
+    private string returnUrl = string.Empty;
+
+    async Task HandleRegistration()
+    {
+        var result = await AuthService.Register(hrac);
+        message = result.Message;
+        if (result.Success)
+        {
+            messageCssClass = "text-success";
+            NavigationManager.NavigateTo("/login");
+        }
+        else
+            messageCssClass = "text-danger";
+            
+    }
+}

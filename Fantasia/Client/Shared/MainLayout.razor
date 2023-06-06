@@ -1,0 +1,22 @@
+﻿@inherits LayoutComponentBase
+
+<body>
+    <div class="page">
+            <div class="sidebar">
+            <NavMenu />
+            </div>
+        <AuthorizeView>
+            <Authorized>
+                <div class="header">
+                    <Header />
+                </div>
+            </Authorized>
+            <NotAuthorized>
+                <div class="fantasia"><p>Fantasia</p></div>
+            </NotAuthorized>
+        </AuthorizeView>
+        <div class="main">
+            @Body
+        </div>
+    </div>
+</body>

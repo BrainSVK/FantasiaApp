@@ -1,0 +1,306 @@
+﻿@page "/bojPage"
+@inject IPostavaService PostavaService
+@inject IUtokyService UtokyService
+@inject IBojService BojService
+@inject NavigationManager NavigationManager
+@inject HideNavBar HideNavBar
+@attribute [Authorize]
+
+@if (boj != null && postava != null)
+    {
+        <div class="oknoBoj"  style="background-image: url(@pozadieBoja)">
+            <div id="obrazok" style="background-image: url(@postava.Image)"></div>
+            <progress max="@boj.MaxZ" min="0" value="@boj.AktZ" id="health"></progress>
+            <p id="p1">@boj.AktZ/@boj.MaxZ</p>
+            <div id="obrazokNepriatel" style="background-image: url(@imgNepriatela)"></div>
+            <progress max="@boj.MaxZNep" min="0" value="@boj.AktZNep" id="healthNepriatel"></progress>
+            <p id="p2">@boj.AktZNep/@boj.MaxZNep</p>
+            <div id="pata">
+                <div id="pouzivaneSchopnosti">
+                    <img @onclick="()=>PouziUtok(1)" id="fyzImg" src="@fyzUtok.FyzImageUrl" alt="@fyzUtok.NazovFyzUtoku" style="cursor:pointer; min-width: 70px">
+                    <img @onclick="()=>PouziUtok(2)" id="magImg" src="@magUtok.MagImageUrl" alt="@magUtok.NazovMagUtoku" style="cursor:pointer; min-width: 70px">
+                    <img @onclick="()=>PouziUtok(3)" id="vieImg" src="@vieUtok.VieImageUrl" alt="@vieUtok.NazovVieUtoku" style="cursor:pointer; min-width: 70px">
+                </div>
+                <div id="popis">
+                    <p id="popis1">@popisKola</p>
+                </div>
+            </div>
+        </div>
+    }
+
+@code {
+    Fantasia.Shared.Postava? postava = null;
+    Fantasia.Shared.PostavaUpdate? postavaU = new PostavaUpdate();
+    Fantasia.Shared.Boj? boj = null;
+    FyzUtoky? fyzUtok = null;
+    MagUtoky? magUtok = null;
+    VieUtoky? vieUtok = null;
+    VytvorBoj? vytvorBoj = null;
+    string pozadieBoja = string.Empty;
+    string imgNepriatela = string.Empty;
+    string popisKola = string.Empty;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        postava = await PostavaService.GetPostava();
+        fyzUtok = await UtokyService.GetFyzUtok(postava.FyzUtokyId);
+        magUtok = await UtokyService.GetMagUtok(postava.MagUtokyId);
+        vieUtok = await UtokyService.GetVieUtok(postava.VieUtokyId);
+        postavaU.FyzickaSila = postava.FyzickaSila;
+        postavaU.MagickaSila = postava.MagickaSila;
+        postavaU.Viera = postava.Viera;
+        postavaU.Id = postava.Id;
+        postavaU.Image = postava.Image;
+        postavaU.Stamina = postava.Stamina;
+        postavaU.Vitalita = postava.Vitalita;
+        postavaU.Stastie = postava.Stastie;
+        postavaU.FyzUtokyId = postava.FyzUtokyId;
+        postavaU.VieUtokyId = postava.VieUtokyId;
+        postavaU.MagUtokyId = postava.MagUtokyId;
+        postavaU.VolneStaty = postava.VolneStaty;
+        var result = await BojService.GetBoj(postava.Id);
+        boj = result.Data;
+        if (boj.Obtiaznost <= 4)
+        {
+            pozadieBoja = "/images/adventuraWinter.png";
+            imgNepriatela = "/images/iceMonster.png";
+        }
+        else if (boj.Obtiaznost <= 8)
+        {
+            pozadieBoja = "/images/adventuraForest.png";
+            imgNepriatela = "/images/sandMonster.png";
+        }
+        else if (boj.Obtiaznost <= 12)
+        {
+            pozadieBoja = "/images/prostredie.png";
+            imgNepriatela = "/images/forestMonster.png";
+        }
+        else
+        {
+            pozadieBoja = "/images/adventuraLava.png";
+            imgNepriatela = "/images/fireMonster.png";
+        }
+    }
+
+    private async void UpdateBoj()
+    {
+        await BojService.UpdateBoj(boj);
+    }
+
+
+    private void PouziUtok(int utok)
+    {
+        if (boj.AktZ != 0 && boj.AktZNep != 0)
+        {
+            Random rnd = new Random();
+            double percento = 0;
+            double crit = 0;
+            int znizZivot = 0;
+            int znizZivotHracovi = 0;
+            bool koniec = true;
+            crit = rnd.NextDouble();
+            percento = rnd.NextDouble();
+            if (utok == 1)
+            {
+                if (fyzUtok.Id == 1)
+                {
+
+                    if (percento <= 0.5)
+                    {
+                        znizZivot += postava.FyzickaSila;
+                    }
+                    else
+                    {
+                        znizZivot += postava.FyzickaSila;
+                        znizZivotHracovi = UtokNepriatela(znizZivot);
+                    }
+                }
+                else if (fyzUtok.Id == 2)
+                {
+                    if (percento <= 0.2)
+                    {
+                        znizZivot += (int)(postava.FyzickaSila * 1.5);
+                    }
+                    else
+                    {
+                        znizZivot += (int)(postava.FyzickaSila * 1.5);
+                        znizZivotHracovi = UtokNepriatela(znizZivot);
+                    }
+                }
+                else
+                {
+                    while (koniec)
+                    {
+                        percento = rnd.NextDouble();
+                        if (percento <= 0.8)
+                        {
+                            znizZivot += (int)(postava.FyzickaSila * 0.4);
+                        }
+                        else
+                        {
+                            znizZivot += (int)(postava.FyzickaSila * 0.4);
+                            znizZivotHracovi = UtokNepriatela(znizZivot);
+                            koniec = false;
+                        }
+                    }
+
+                }
+            }
+            else if (utok == 2)
+            {
+                if (magUtok.Id == 1)
+                {
+                    if (percento <= 0.6)
+                    {
+                        znizZivot += (int)(postava.MagickaSila * 1.2) + (int)(boj.MaxZ * 0.1);
+                        znizZivotHracovi = UtokNepriatela(znizZivot);
+                    }
+                    else
+                    {
+                        znizZivot += (int)(postava.MagickaSila * 1.2);
+                        znizZivotHracovi = UtokNepriatela(znizZivot);
+                    }
+                }
+                else if (magUtok.Id == 2)
+                {
+                    if (percento <= 0.8)
+                    {
+                        znizZivot += (int)(postava.MagickaSila * 0.9) + (int)(boj.MaxZ * 0.05);
+                        znizZivotHracovi = UtokNepriatela(znizZivot);
+                    }
+                    else
+                    {
+                        znizZivot += (int)(postava.MagickaSila * 0.9);
+                        znizZivotHracovi = UtokNepriatela(znizZivot);
+                    }
+                }
+                else
+                {
+                    if (percento <= 0.4)
+                    {
+                        znizZivot += (int)(postava.MagickaSila * 0.8) + (int)(boj.MaxZ * 0.2);
+                        znizZivotHracovi = UtokNepriatela(znizZivot);
+                    }
+                    else
+                    {
+                        znizZivot += (int)(postava.MagickaSila * 0.8);
+                        znizZivotHracovi = UtokNepriatela(znizZivot);
+                    }
+                }
+            }
+            else
+            {
+                if (vieUtok.Id == 1)
+                {
+                    boj.AktZ += (int)(postava.Viera * 2.5);
+                    if (boj.AktZ > boj.MaxZ)
+                    {
+                        boj.AktZ = boj.MaxZ;
+                    }
+                    znizZivotHracovi = UtokNepriatela(znizZivot);
+                }
+                else if (vieUtok.Id == 2)
+                {
+                    postava.FyzickaSila += (int)(postava.Viera * 0.3);
+                    znizZivotHracovi = UtokNepriatela(znizZivot);
+                }
+                else
+                {
+                    postava.Stamina += (int)(postava.Viera * 0.6);
+                    znizZivotHracovi = UtokNepriatela(znizZivot);
+                }
+            }
+            if (crit <= (double)postava.Stastie/100)
+            {
+                znizZivot = znizZivot * 2;
+            }
+            boj.AktZNep -= znizZivot;
+            if (boj.AktZNep < 0)
+            {
+                boj.AktZNep = 0;
+            }
+            if (znizZivot == 0)
+            {
+                popisKola = $"Hráč požil buff schopnosť a obdržal {znizZivotHracovi} poškodenie";
+            } else
+            {
+                popisKola = $"Hráč spôsobil poškodenie {znizZivot} a obdržal {znizZivotHracovi} poškodenie";
+            }
+            UpdateBoj();
+            if (boj.AktZNep == 0)
+            {
+                VymazBoj(true);
+            }
+
+            if (boj.AktZ == 0)
+            {
+                VymazBoj(false);
+            }
+        }
+    }
+
+    async void ZvysVolneStaty()
+    {
+        postavaU.VolneStaty += boj.Obtiaznost;
+    }
+
+    private async void VymazBoj(bool vyhral)
+    {
+        if (vyhral)
+        {
+            ZvysVolneStaty();
+            popisKola = $"Gratulujem porazil si nepriateľa a získal si počet {boj.Obtiaznost} voľných statov";
+            await PostavaService.UpdatePostava(postavaU);
+        }
+        else
+        {
+            popisKola = $"Bohužial prehral si, nabudúce sa snaž viacej alebo vyskúšaj lahšieho protivníka";
+        }
+        await Task.Delay(5000);
+        var result = await BojService.DeleteBoj(boj);
+        if (result.Data)
+        {
+            NavigationManager.NavigateTo("/adventura");
+            await ToggleNavbarAsync();
+        }
+    }
+
+    private async Task ToggleNavbarAsync()
+    {
+        await HideNavBar.ToggleNavbarAsync();
+    }
+
+    private int UtokNepriatela(int znizZivotNepriatela)
+    {
+        int znizZivot = 0;
+        if (boj.AktZNep - znizZivotNepriatela > 0)
+        {
+            Random rnd = new Random();
+            double utok = rnd.NextDouble();
+            if (boj.AktZNep > 0)
+            {
+            
+            }
+            if (utok < 0.5)
+            {
+                znizZivot += boj.RandSilaUtok - (int)(postava.Stamina * 0.10);
+                boj.AktZ -= znizZivot;
+                if (boj.AktZ < 0)
+                {
+                    boj.AktZ = 0;
+                }
+            } else
+            {
+                znizZivot += boj.RandSilaUtok - (int)(postava.Vitalita * 0.10);
+                boj.AktZ -= znizZivot;
+                if (boj.AktZ < 0)
+                {
+                    boj.AktZ = 0;
+                }
+            }
+        }
+        return znizZivot;
+    }
+
+}
