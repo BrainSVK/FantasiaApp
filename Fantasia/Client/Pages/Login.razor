@@ -6,9 +6,11 @@
 @inject NavigationManager NavigationManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
+
+
 <EditForm Model="hrac" OnValidSubmit="HandleLogin">
     <DataAnnotationsValidator />
-    <div class="center l clog">
+        <div class="center l clog">
         <h1>Prihlásiť</h1>
         <div class="box-win">
             <div class="scrollmenu-forma1">
@@ -32,8 +34,9 @@
                 Nie si ešte registrovaný? <a href="registracia">Registrovať</a>
             </div>
         </div>
-    </div>
+        </div>
 </EditForm>
+
 
 @code {
     private LoginModel hrac = new LoginModel();

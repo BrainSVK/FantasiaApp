@@ -17,9 +17,9 @@
             <p id="p2">@boj.AktZNep/@boj.MaxZNep</p>
             <div id="pata">
                 <div id="pouzivaneSchopnosti">
-                    <img @onclick="()=>PouziUtok(1)" id="fyzImg" src="@fyzUtok.FyzImageUrl" alt="@fyzUtok.NazovFyzUtoku" style="cursor:pointer; min-width: 70px">
-                    <img @onclick="()=>PouziUtok(2)" id="magImg" src="@magUtok.MagImageUrl" alt="@magUtok.NazovMagUtoku" style="cursor:pointer; min-width: 70px">
-                    <img @onclick="()=>PouziUtok(3)" id="vieImg" src="@vieUtok.VieImageUrl" alt="@vieUtok.NazovVieUtoku" style="cursor:pointer; min-width: 70px">
+                    <img @onclick="()=>PouziUtok(1)" id="fyzImg" src="@fyzUtok?.FyzImageUrl" alt="@fyzUtok?.NazovFyzUtoku" style="cursor:pointer; min-width: 70px">
+                    <img @onclick="()=>PouziUtok(2)" id="magImg" src="@magUtok?.MagImageUrl" alt="@magUtok?.NazovMagUtoku" style="cursor:pointer; min-width: 70px">
+                    <img @onclick="()=>PouziUtok(3)" id="vieImg" src="@vieUtok?.VieImageUrl" alt="@vieUtok?.NazovVieUtoku" style="cursor:pointer; min-width: 70px">
                 </div>
                 <div id="popis">
                     <p id="popis1">@popisKola</p>
@@ -29,12 +29,12 @@
     }
 
 @code {
-    Fantasia.Shared.Postava? postava = null;
-    Fantasia.Shared.PostavaUpdate? postavaU = new PostavaUpdate();
-    Fantasia.Shared.Boj? boj = null;
-    FyzUtoky? fyzUtok = null;
-    MagUtoky? magUtok = null;
-    VieUtoky? vieUtok = null;
+    Fantasia.Shared.Postava postava = new Fantasia.Shared.Postava();
+    PostavaUpdate postavaU = new PostavaUpdate();
+    Boj boj = new Boj();
+    FyzUtoky fyzUtok = new FyzUtoky();
+    MagUtoky magUtok = new MagUtoky();
+    VieUtoky vieUtok = new VieUtoky();
     VytvorBoj? vytvorBoj = null;
     string pozadieBoja = string.Empty;
     string imgNepriatela = string.Empty;
@@ -60,7 +60,10 @@
         postavaU.MagUtokyId = postava.MagUtokyId;
         postavaU.VolneStaty = postava.VolneStaty;
         var result = await BojService.GetBoj(postava.Id);
-        boj = result.Data;
+        if (result.Data != null)
+        {
+            boj = result.Data;
+        }
         if (boj.Obtiaznost <= 4)
         {
             pozadieBoja = "/images/adventuraWinter.png";
@@ -240,10 +243,21 @@
         }
     }
 
-    async void ZvysVolneStaty()
+    private void ZvysVolneStaty()
     {
         postavaU.VolneStaty += boj.Obtiaznost;
     }
+
+    private void ResetujStaty()
+    {
+        postavaU.FyzickaSila = 10;
+        postavaU.MagickaSila= 10;
+        postavaU.Viera = 10;
+        postavaU.Vitalita = 10;
+        postavaU.Stamina = 10;
+        postavaU.Stastie = 10;
+        postavaU.VolneStaty = 0;
+    } 
 
     private async void VymazBoj(bool vyhral)
     {
@@ -255,7 +269,10 @@
         }
         else
         {
+            ResetujStaty();
             popisKola = $"Bohužial prehral si, nabudúce sa snaž viacej alebo vyskúšaj lahšieho protivníka";
+            await PostavaService.UpdatePostava(postavaU);
+
         }
         await Task.Delay(5000);
         var result = await BojService.DeleteBoj(boj);

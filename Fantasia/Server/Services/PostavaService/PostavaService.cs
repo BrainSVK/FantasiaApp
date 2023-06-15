@@ -1,27 +1,19 @@
-﻿using Fantasia.Server.Services.AuthService;
-using Fantasia.Server.Data;
-using Fantasia.Shared;
-using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
-using Stripe;
-using System.Security.Cryptography;
-
+﻿
 namespace Fantasia.Server.Services.PostavaService
 {
     public class PostavaService : IPostavaService
     {
         private readonly DataContext _context;
-        private readonly IAuthService _authService;
 
-        public PostavaService(DataContext context, IAuthService authService)
+        public PostavaService(DataContext context)
         {
             _context = context;
-            _authService = authService;
         }
 
         public async Task<Postava> GetPostavaById(int Id)
         {
-            return await _context.Postava.FirstOrDefaultAsync(p => p.Id.Equals(Id));
+            var hrac = await _context.Hrac.FirstOrDefaultAsync(p => p.Id.Equals(Id));
+            return (await _context.Postava.FirstOrDefaultAsync(p => p.Id.Equals(hrac!.PostavaId)))!;
         }
 
         public async Task<ServiceResponse<PostavaUpdate>> UpdatePostava(PostavaUpdate postava)
@@ -52,13 +44,19 @@ namespace Fantasia.Server.Services.PostavaService
             if (postava.Image == "zmen")
             {
                 var dbImg = await _context.Image.FirstOrDefaultAsync(p => p.Img.Equals(dbPostava.Image));
-                int id = dbImg.Id + 1;
+                int id = 0;
+                if (dbImg != null) {
+                    id = dbImg.Id + 1;
+                }
                 if (id == 5)
                 {
                     id = 1;
                 }
                 var dbDaj = await _context.Image.FirstOrDefaultAsync(p => p.Id.Equals(id));
-                dbPostava.Image = dbDaj.Img;
+                if (dbDaj != null)
+                {
+                    dbPostava.Image = dbDaj.Img;
+                }
                 postava.Image = dbPostava.Image;
             }
 

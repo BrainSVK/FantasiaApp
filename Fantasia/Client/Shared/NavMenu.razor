@@ -6,29 +6,31 @@
 
 
 <nav class="n navbar-dark" style="@(NavbarVisibility ? "display: block;" : "display: none;")">
-    <ul id='nav-bar'>
+    <div id='nav-bar'>
         <input type='checkbox' id='check' />
-        <span class="menu">
+        <div class="menu text-stred">
+            <ul>
                 <li><a href="/">O hre</a></li>
                 <AuthorizeView>
                     <Authorized>
-                        <li><a href="profil">Profil</a></li>
-                        <li><a href="" @onclick="Logout" >Odhlasiť sa</a></li>
-                        <li><a href="" @onclick="Vymaz" >Vymazať účet</a></li>
+                        <li><a  href="profil">Profil</a></li>
+                        <li><a  href="" @onclick="Logout">Odhlás sa</a></li>
+                        <li><a  href="" @onclick="Vymaz">Vymaž účet</a></li>
                     </Authorized>
                     <NotAuthorized>
-                        <li><a href="login">Prihlasiť sa</a></li>
-                        <li><a href="registracia">Registrovať sa</a></li>
+                        <li><a  href="login">Prihlasiť sa</a></li>
+                        <li><a  href="registracia">Registrovať sa</a></li>
                     </NotAuthorized>
                 </AuthorizeView>
+            </ul>
                 <label for="check" class="close-menu navbar-toggler" style="background: black">
                     <span class="navbar-toggler-icon"></span>
                 </label>
-        </span>
+        </div>
         <label for="check" class="open-menu navbar-toggler" style="background: black">
                     <span class="navbar-toggler-icon"></span>
         </label>
-    </ul>
+    </div>
 </nav>
 
 @code {
@@ -53,7 +55,10 @@
 
     protected override async Task OnInitializedAsync()
     {
-        HideNavBar.NavbarUpdated += HandleNavbarUpdated;
+        await Task.Run(() =>
+        {
+            HideNavBar.NavbarUpdated += HandleNavbarUpdated!;
+        });
     }
 
     private void HandleNavbarUpdated(object sender, string visibility)
@@ -74,6 +79,10 @@
 
     public async ValueTask DisposeAsync()
     {
-        HideNavBar.NavbarUpdated -= HandleNavbarUpdated;
+
+        await Task.Run(() =>
+        {
+            HideNavBar.NavbarUpdated -= HandleNavbarUpdated!;
+        });
     }
 }

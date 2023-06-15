@@ -1,9 +1,4 @@
-﻿using Azure.Core;
-using Fantasia.Client.Pages;
-using Fantasia.Server.Data;
-using Fantasia.Shared;
-using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.EntityFrameworkCore;
+﻿using Fantasia.Shared;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -25,10 +20,9 @@ namespace Fantasia.Server.Services.AuthService
             _configuration = configuration;
             _httpContextAccessor = httpContextAccessor;
         }
+        public int GetUserId() => int.Parse(_httpContextAccessor?.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
-        public int GetUserId() => int.Parse(_httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
-
-        public string GetUserNickName() => _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
+        public string GetUserNickName() => _httpContextAccessor?.HttpContext?.User.FindFirstValue(ClaimTypes.Name)!;
 
         public async Task<ServiceResponse<string>> Login(string nickName, string password)
         {
@@ -70,23 +64,23 @@ namespace Fantasia.Server.Services.AuthService
             _hrac.PasswordHash = passwordHash;
             _hrac.PasswordSalt = passwordSalt;
 
-            var postava = new Shared.Postava
-            {
-                Image = "/imgHracov/postava2.png",
-                FyzickaSila = 10,
-                MagickaSila = 10,
-                Viera = 10,
-                Stamina = 10,
-                Vitalita = 10,
-                Stastie = 10,
-                VolneStaty = 0,
-                FyzUtokyId = 1,
-                MagUtokyId = 1,
-                VieUtokyId = 1
-            };
+            //var postava = new Postava
+            //{
+            //    Image = "/imgHracov/postava2.png",
+            //    FyzickaSila = 10,
+            //    MagickaSila = 10,
+            //    Viera = 10,
+            //    Stamina = 10,
+            //    Vitalita = 10,
+            //    Stastie = 10,
+            //    VolneStaty = 0,
+            //    FyzUtokyId = 1,
+            //    MagUtokyId = 1,
+            //    VieUtokyId = 1
+            //};
 
-            _context.Postava.Add(postava);
-            await _context.SaveChangesAsync();
+            ////_context.Postava.Add(postava);
+            ////await _context.SaveChangesAsync();
 
             var hrac = new Hrac
             {
@@ -94,10 +88,23 @@ namespace Fantasia.Server.Services.AuthService
                 Email = _hrac.Email,
                 PasswordHash = _hrac.PasswordHash,
                 PasswordSalt = _hrac.PasswordSalt,
-                PostavaId = _context.Postava.Max(postava => postava.Id)
             };
 
             _context.Hrac.Add(hrac);
+            await _context.SaveChangesAsync();
+
+            var dbPostava = await _context.Postava.FirstOrDefaultAsync(p => p.Id.Equals(hrac!.PostavaId));
+            dbPostava!.Image = "/imgHracov/postava2.png";
+            dbPostava.FyzickaSila = 10;
+            dbPostava.MagickaSila = 10;
+            dbPostava.Vitalita = 10;
+            dbPostava.Stamina = 10;
+            dbPostava.Viera = 10;
+            dbPostava.Stastie = 10;
+            dbPostava.VolneStaty = 0;
+            dbPostava.FyzUtokyId = 1;
+            dbPostava.MagUtokyId = 1;
+            dbPostava.VieUtokyId = 1;
             await _context.SaveChangesAsync();
 
             return new ServiceResponse<int> { Data = hrac.Id, Message = "Registration successful!" };
@@ -164,7 +171,7 @@ namespace Fantasia.Server.Services.AuthService
             };
 
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8
-                .GetBytes(_configuration.GetSection("AppSettings:Token").Value));
+                .GetBytes(_configuration?.GetSection("AppSettings:Token").Value!));
 
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
@@ -180,7 +187,7 @@ namespace Fantasia.Server.Services.AuthService
 
         public async Task<Hrac> GetUserById(int Id)
         {
-            return await _context.Hrac.FirstOrDefaultAsync(h => h.Id.Equals(Id));
+            return (await _context.Hrac.FirstOrDefaultAsync(h => h.Id.Equals(Id)))!;
         }
 
         public async Task<ServiceResponse<HracUpdate>> UpdateHrac(HracUpdate hrac)
@@ -240,7 +247,7 @@ namespace Fantasia.Server.Services.AuthService
         {
 
             var dbHrac = await _context.Hrac.FirstOrDefaultAsync(h => h.Id.Equals(Id));   
-            var dbPostava = await _context.Postava.FirstOrDefaultAsync(p => p.Id.Equals(Id));
+            var dbPostava = await _context.Postava.FirstOrDefaultAsync(p => p.Id.Equals(dbHrac!.PostavaId));
             var dbBoj = await _context.Boj.FirstOrDefaultAsync(p => p.IdPostava.Equals(Id));
 
             if (dbHrac == null)
@@ -259,7 +266,8 @@ namespace Fantasia.Server.Services.AuthService
             }
 
             _context.Hrac.Remove(dbHrac);
-            _context.Postava.Remove(dbPostava);
+            _context.Postava.Remove(dbPostava!);
+
             await _context.SaveChangesAsync();
             return new ServiceResponse<bool> { Data = true };
 

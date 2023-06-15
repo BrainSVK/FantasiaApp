@@ -8,10 +8,8 @@ namespace Fantasia.Client.Services.BojService
         private readonly HttpClient _http;
         private readonly IAuthService _authService;
 
-        Postava _postava { get; set; }
         public BojService(HttpClient http, IAuthService authService)
         {
-            //_localStorage = localStorage;
             _http = http;
             _authService = authService;
         }
@@ -20,13 +18,13 @@ namespace Fantasia.Client.Services.BojService
         {
             var result = await _http.PostAsJsonAsync("api/boj/vytvor", vytvorBoj);
             var content = await result.Content.ReadFromJsonAsync<ServiceResponse<Boj>>();
-            return content;
+            return content!;
         }
 
         public async Task<ServiceResponse<Boj>> GetBoj(int IdPostava)
         {
                 var response = await _http.GetFromJsonAsync<ServiceResponse<Boj>>($"api/boj/getboj?IdPostava={IdPostava}");
-                return response;
+                return response!;
         }
 
         public async Task<ServiceResponse<Boj>> UpdateBoj(Boj Boj)
@@ -35,11 +33,11 @@ namespace Fantasia.Client.Services.BojService
             {
                 var result = await _http.PutAsJsonAsync($"api/boj", Boj);
                 var content = await result.Content.ReadFromJsonAsync<ServiceResponse<Boj>>();
-                return content;
+                return content!;
             }
             else
             {
-                return null;
+                return null!;
             }
         }
 
@@ -47,7 +45,7 @@ namespace Fantasia.Client.Services.BojService
         {
             var result = await _http.DeleteAsync($"api/boj?Id={boj.Id}");
             var content = await result.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
-            return content;
+            return content!;
         }
     }
 }

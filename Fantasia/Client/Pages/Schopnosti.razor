@@ -21,10 +21,10 @@
         <div class="rozdelSchopnosti">
             <div class="schopnostiUtokov">
                 <h1>Fyziské schopnosti</h1>
-                <div class="schopnostiUtokovRozOkno">
+                 <div class="schopnostiUtokovRozOkno">
                     <li>
                         <div class="flying">
-                            <button onclick="@DajFlyingkick" style="padding: 0; background: none ;border: none;"><img src="/images/FlyingKick60.png" alt="flyingkick"/></button>
+                            <button @onclick="@DajFlyingkick" style="padding: 0; background: none ;border: none;"><img src="/images/FlyingKick60.png" alt="flyingkick"/></button>
                             <div class="skryteOkno schoSkry">
                                 <p1>FlyingKick je fyzická schopnosť na vytvorenie
                                     <p2>kombinácie útokov(50%)
@@ -40,7 +40,7 @@
                     </li>
                     <li>
                         <div class="bod">
-                            <button onclick="@DajBodySlam" style="padding: 0; background: none ;border: none;"><img src="/images/BodySlam60.png" alt="bodyslam"/></button>
+                            <button @onclick="@DajBodySlam" style="padding: 0; background: none ;border: none;"><img src="/images/BodySlam60.png" alt="bodyslam"/></button>
                             <div class="skryteOkno schoSkry">
                                 <p1>BodySlam je fyziská schopnosť pri ktorej hodom o zem
                                     <p2>omráčiš protivníka(20%)
@@ -56,7 +56,7 @@
                     </li>
                     <li>
                         <div class="gataling">
-                            <button onclick="@DajPunchingGataling" style="padding: 0; background: none ;border: none;"><img src="/images/PunchGataling60.png" alt="punchgataling"/></button>
+                            <button @onclick="@DajPunchingGataling" style="padding: 0; background: none ;border: none;"><img src="/images/PunchGataling60.png" alt="punchgataling"/></button>
                             <div class="skryteOkno schoSkry">
                                 <p1>PunchGataling je fyzická schopnosť pri ktorej uzivatel
                                     <p2>vrhá päsťami(80%)
@@ -70,12 +70,12 @@
                             </div>
                         </div>
                     </li>
-                </div>
+               </div>
                 <h1>Magické schopnosti</h1>
                 <div class="schopnostiUtokovRozOkno">
                     <li>
                         <div class="fire">
-                            <button onclick="@DajFireBall" style="padding: 0; background: none ;border: none;"><img src="/images/fireBall60.png" alt="fireball" /></button>
+                            <button @onclick="@DajFireBall" style="padding: 0; background: none ;border: none;"><img src="/images/fireBall60.png" alt="fireball" /></button>
                             <div class="skryteOkno schoSkry">
                                 <p1>FireBall je magická schopnosť ohnivého atribútu
                                     <p2>spôsobuje zapálenie(60%)
@@ -91,7 +91,7 @@
                     </li>
                     <li>
                         <div class="frost">
-                            <button onclick="@DajFrostNova" style="padding: 0; background: none ;border: none;"><img src="/images/frostNova60.png" alt="frostnova" /></button>
+                            <button @onclick="@DajFrostNova" style="padding: 0; background: none ;border: none;"><img src="/images/frostNova60.png" alt="frostnova" /></button>
                             <div class="skryteOkno schoSkry">
                                 <p1>FrostNova je magická schopnosť ľadového atribútu
                                     <p2>spôsobuje umrznutie(80%)
@@ -107,7 +107,7 @@
                     </li>
                     <li>
                         <div class="wind">
-                            <button onclick="@DajWindSlash" style="padding: 0; background: none ;border: none;"><img src="/images/windSlash60.png" alt="windslash" /></button>
+                            <button @onclick="@DajWindSlash" style="padding: 0; background: none ;border: none;"><img src="/images/windSlash60.png" alt="windslash" /></button>
                             <div class="skryteOkno schoSkry">
                                 <p1>WindSlash je magická schopnosť veterného atribútu
                                     <p2>spôsobuje krvácanie(30%)
@@ -121,12 +121,12 @@
                             </div>
                         </div>
                     </li>
-                </div>
+               </div>
                 <h1>Schopnosti viery</h1>
                 <div class="schopnostiUtokovRozOkno">
                     <li>
                         <div class="wind">
-                            <button onclick="@DajHeal" style="padding: 0; background: none ;border: none;"><img src="/images/heal60.png" alt="heal" /></button>
+                            <button @onclick="@DajHeal" style="padding: 0; background: none ;border: none;"><img src="/images/heal60.png" alt="heal" /></button>
                             <div class="skryteOkno schoSkry">
                                 <p1>Heal je schopnosť viery pri ktorej sa uživateľ <br>
                                     <p2>vylieči životy
@@ -142,7 +142,7 @@
                     </li>
                     <li>
                         <div class="bod">
-                            <button onclick="@DajDefBonus" style="padding: 0; background: none ;border: none;"><img src="/images/defBonus60.png" alt="defbonus" /></button>
+                            <button @onclick="@DajDefBonus" style="padding: 0; background: none ;border: none;"><img src="/images/defBonus60.png" alt="defbonus" /></button>
                             <div class="skryteOkno schoSkry">
                                 <p1>DefenceBonus je schopnosť viery pri ktorej si uživateľ
                                     <p2>zvýši odolnosť
@@ -158,7 +158,7 @@
                     </li>
                     <li>
                         <div class="fire">
-                            <button onclick="@DajAttakeBonus" style="padding: 0; background: none ;border: none;"><img src="/images/AttakeBonus60.png" alt="attakebonus" /></button>
+                            <button @onclick="@DajAttakeBonus" style="padding: 0; background: none ;border: none;"><img src="/images/AttakeBonus60.png" alt="attakebonus" /></button>
                             <div class="skryteOkno schoSkry">
                                 <p1>AttakeBonus je schopnosť viery pri ktorej si uživateľ
                                     <p2>zvýši silu
@@ -172,18 +172,18 @@
                             </div>
                         </div>
                     </li>
-                </div>
-            </div>
-        </div>
+               </div>
+           </div>
+       </div>
     </div>
     </EditForm>
 }
 @code {
-    Fantasia.Shared.Postava? postava = null;
-    Fantasia.Shared.PostavaUpdate? postavaU = new PostavaUpdate();
-    FyzUtoky? fyzUtok = null;
-    MagUtoky? magUtok = null;
-    VieUtoky? vieUtok = null;
+    Fantasia.Shared.Postava? postava = new Fantasia.Shared.Postava();
+    PostavaUpdate postavaU = new PostavaUpdate();
+    FyzUtoky fyzUtok = new FyzUtoky();
+    MagUtoky magUtok = new MagUtoky();
+    VieUtoky vieUtok = new VieUtoky();
 
     protected override async Task OnInitializedAsync()
     {
@@ -215,56 +215,56 @@
         }
     }
 
-    async void DajFlyingkick()
+    void DajFlyingkick()
     {
         postavaU.FyzUtokyId = 1;
         fyzUtok.FyzImageUrl = "/images/FlyingKick60.png";
 
     }
 
-    async void DajBodySlam()
+    void DajBodySlam()
     {
         postavaU.FyzUtokyId = 2;
         fyzUtok.FyzImageUrl = "/images/BodySlam60.png";
     }
 
-    async void DajPunchingGataling()
+    void DajPunchingGataling()
     {
         postavaU.FyzUtokyId = 3;
         fyzUtok.FyzImageUrl = "/images/PunchGataling60.png";
     }
 
-    async void DajFireBall()
+    void DajFireBall()
     {
         postavaU.MagUtokyId = 1;
         magUtok.MagImageUrl = "/images/fireBall60.png";
     }
 
-    async void DajFrostNova()
+    void DajFrostNova()
     {
         postavaU.MagUtokyId = 2;
         magUtok.MagImageUrl = "/images/frostNova60.png";
     }
 
-    async void DajWindSlash()
+    void DajWindSlash()
     {
         postavaU.MagUtokyId = 3;
         magUtok.MagImageUrl = "/images/windSlash60.png";
     }
 
-    async void DajHeal()
+    void DajHeal()
     {
         postavaU.VieUtokyId = 1;
         vieUtok.VieImageUrl = "/images/heal60.png";
     }
 
-    async void DajDefBonus()
+    void DajDefBonus()
     {
         postavaU.VieUtokyId = 2;
         vieUtok.VieImageUrl = "/images/defBonus60.png";
     }
 
-    async void DajAttakeBonus()
+    void DajAttakeBonus()
     {
         postavaU.VieUtokyId = 3;
         vieUtok.VieImageUrl = "/images/AttakeBonus60.png";

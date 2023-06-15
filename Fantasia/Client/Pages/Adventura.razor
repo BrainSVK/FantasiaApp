@@ -50,10 +50,10 @@
     </div>
 }
 @code {
-    Fantasia.Shared.Postava? postava = null;
-    FyzUtoky? fyzUtok = null;
-    MagUtoky? magUtok = null;
-    VieUtoky? vieUtok = null;
+    Fantasia.Shared.Postava postava = new Fantasia.Shared.Postava();
+    FyzUtoky fyzUtok = new FyzUtoky();
+    MagUtoky magUtok = new MagUtoky();
+    VieUtoky vieUtok = new VieUtoky();
     VytvorBoj? vytvorBoj = null;
 
     protected override async Task OnInitializedAsync()
@@ -75,9 +75,9 @@
         await HideNavBar.ToggleNavbarAsync();
     }
 
-    private void ClickBoj(int obtiaznost)
+    private async Task ClickBoj(int obtiaznost)
     {
-        SpustiBoj(obtiaznost);
+        await SpustiBoj(obtiaznost);
     }
 
     private async Task SpustiBoj(int obtiaznost)
@@ -87,7 +87,7 @@
         if (result.Success)
         {
             NavigationManager.NavigateTo("/bojPage");
-            ToggleNavbarAsync();
+            await ToggleNavbarAsync();
         }
     }
 

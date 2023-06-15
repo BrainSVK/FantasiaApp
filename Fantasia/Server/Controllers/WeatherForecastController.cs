@@ -1,4 +1,3 @@
-using Fantasia.Shared;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fantasia.Server.Controllers

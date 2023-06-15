@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace Fantasia.Shared
 {
+    //pouzil som od patrick god z YT
     public class ServiceResponse<T>
     {
         public T? Data { get; set; }

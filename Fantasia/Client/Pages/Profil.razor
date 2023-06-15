@@ -61,7 +61,7 @@
                     <h>Postava</h>
                 </div>
                 <div class="obrazokProfil" style="background-image: url(@postava.Image)"></div>
-                   <input class="submit2" onclick="@UpdatePostava" type="submit" name="submitVymaz" value="Zmen">
+                   <input class="submit2" @onclick="@UpdatePostava" type="submit" name="submitVymaz" value="Zmen">
             </div>
         </div>
     </div>
@@ -73,10 +73,10 @@
 
 
 @code {
-    Hrac? hrac = null;
-    HracUpdate? hracUpdate = null;
-    Fantasia.Shared.Postava? postava = null;
-    Fantasia.Shared.PostavaUpdate? postavaU = new PostavaUpdate();
+    Hrac hrac = new Hrac();
+    HracUpdate hracUpdate = new HracUpdate();
+    Fantasia.Shared.Postava postava = new Fantasia.Shared.Postava();
+    PostavaUpdate postavaU = new PostavaUpdate();
     private string errorMessage = string.Empty;
     string messageCssClass = string.Empty;
 
@@ -100,18 +100,21 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        hracUpdate = new HracUpdate { 
+        await Task.Run(() =>
+            {
+                hracUpdate = new HracUpdate { 
                 Id = hrac.Id,
                 NickName = hrac.NickName,
                 Email = hrac.Email
-        };
+            };
+        });
     }
 
     private async Task UpdatePostava()
     {
         postavaU.Image = "zmen";
         var result = await PostavaService.UpdatePostava(postavaU);
-        if (result != null)
+        if (result.Data != null)
         {
             postava.Image = result.Data.Image;
             NavigationManager.NavigateTo("/profil");

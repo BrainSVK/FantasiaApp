@@ -1,6 +1,4 @@
-﻿using Fantasia.Shared;
-using System.Net;
-
+﻿
 namespace Fantasia.Server.Services.AuthService
 {
     public interface IAuthService

@@ -1,10 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using Fantasia.Shared;
-using Fantasia.Server.Services.PostavaService;
 using Microsoft.AspNetCore.Authorization;
-using Stripe;
-using Azure;
 
 namespace Fantasia.Server.Controllers
 {

@@ -1,10 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
-using Fantasia.Shared;
-//using Fantasia.Server.Services.BojService;
 using Microsoft.AspNetCore.Authorization;
-using Stripe;
-using Azure;
 using Fantasia.Server.Services.BojService;
 
 namespace Fantasia.Server.Controllers

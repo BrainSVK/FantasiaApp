@@ -21,11 +21,11 @@ namespace Fantasia.Client.Services.UtokyService
             if (await _authService.IsUserAuthenticated())
             {
                 var response = await _http.GetFromJsonAsync<FyzUtoky>($"api/utoky/getfyzutok?Id={Id}");
-                return response;
+                return response!;
             }
             else
             {
-                return null;
+                return null!;
             }
         }
 
@@ -34,11 +34,11 @@ namespace Fantasia.Client.Services.UtokyService
             if (await _authService.IsUserAuthenticated())
             {
                 var response = await _http.GetFromJsonAsync<MagUtoky>($"api/utoky/getmagutok?Id={Id}");
-                return response;
+                return response!;
             }
             else
             {
-                return null;
+                return null!;
             }
         }
 
@@ -47,11 +47,11 @@ namespace Fantasia.Client.Services.UtokyService
             if (await _authService.IsUserAuthenticated())
             {
                 var response = await _http.GetFromJsonAsync<VieUtoky>($"api/utoky/getvieutok?Id={Id}");
-                return response;
+                return response!;
             }
             else
             {
-                return null;
+                return null!;
             }
         }
     }

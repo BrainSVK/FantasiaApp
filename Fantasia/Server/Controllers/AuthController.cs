@@ -1,12 +1,6 @@
-﻿using Fantasia.Server.Data;
-using Fantasia.Server.Services.AuthService;
-using Fantasia.Shared;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.Features;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
-using System.Security.Cryptography;
 
 namespace Fantasia.Server.Controllers
 {
@@ -28,7 +22,7 @@ namespace Fantasia.Server.Controllers
                 new Hrac
                 {
                     NickName = request.NickName,
-                    Email = request.Email,
+                    Email = request.Email
                 },
                 request.Password);
 

@@ -5,9 +5,10 @@
 @inject IAuthService AuthService;
 
 
-<EditForm Model="hrac" OnValidSubmit="HandleRegistration">
-    <DataAnnotationsValidator />
-    <div class="center r creg">
+
+        <EditForm Model="hrac" OnValidSubmit="HandleRegistration">
+        <DataAnnotationsValidator />
+        <div class="center r creg">
         <h1>Registrovať</h1>
         <div class="box-win">
                 <div class="scrollmenu-forma">
@@ -40,8 +41,10 @@
               Už si registrovaný? <a href="login">Prihlásiť</a>
             </div>      
         </div>
-    </div>
-</EditForm>
+        </div>
+        </EditForm>
+
+
 
 @code {
     RegisterModel hrac = new RegisterModel();

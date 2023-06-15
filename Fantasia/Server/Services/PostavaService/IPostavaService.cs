@@ -1,5 +1,4 @@
-﻿using Fantasia.Shared;
-
+﻿
 namespace Fantasia.Server.Services.PostavaService
 {
     public interface IPostavaService

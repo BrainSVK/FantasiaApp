@@ -1,15 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
-using Fantasia.Shared;
+﻿using Microsoft.AspNetCore.Mvc;
 using Fantasia.Server.Services.UtokyService;
-using Fantasia.Server.Data;
-using Fantasia.Server.Services.AuthService;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.Features;
-using Microsoft.EntityFrameworkCore;
-using System.Security.Cryptography;
-using Stripe;
+
 
 namespace Fantasia.Server.Controllers
 {

@@ -1,5 +1,4 @@
-﻿using Fantasia.Shared;
-using Microsoft.EntityFrameworkCore;
+﻿
 
 namespace Fantasia.Server.Data
 {

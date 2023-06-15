@@ -1,5 +1,4 @@
-﻿using Fantasia.Shared;
-
+﻿
 namespace Fantasia.Server.Services.UtokyService
 {
     public interface IUtokyService

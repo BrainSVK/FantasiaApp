@@ -127,6 +127,10 @@ form .txt_field {
     margin: 30px 0;
 }
 
+.text-stred {
+    text-align: center;
+}
+
 .txt_field input {
     width: 100%;
     padding: 0 5px;
@@ -662,7 +666,6 @@ input[type="submit"]:hover {
     text-decoration: none;
     cursor: pointer;
     font-size: larger;
-    text-align-all: center;
     font-weight: bold;
     color: white;
 }
@@ -676,7 +679,6 @@ input[type="submit"]:hover {
     padding: 2px 7px;
     text-decoration: none;
     cursor: pointer;
-    text-align-all: center;
     font-weight: bolder;
     font-size: larger;
     color: white;
@@ -1024,6 +1026,7 @@ input[type="submit"]:hover {
     #popis p {
         position: absolute;
         left: 10px;
+        top: 35px;
         color: white;
         font-size: 15px;
     }

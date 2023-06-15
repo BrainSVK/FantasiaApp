@@ -69,48 +69,48 @@
                         <p>Fyzická sila je atribút útočnej sily postavy spôsobená fyzickými útokmi</p>
                     </div>
                     <h1>Fyzická sila</h1>
-                    <button onclick="@ZvysFyzUtok" class="tlacitkoP tPriehladne">+</button>
-                    <button onclick="@ZnizFyzUtok" class="tlacitkoL tPriehladne">-</button>
+                    <button @onclick="@ZvysFyzUtok" class="tlacitkoP tPriehladne">+</button>
+                    <button @onclick="@ZnizFyzUtok" class="tlacitkoL tPriehladne">-</button>
                 </div>
                 <div class="statOkno magia">
                     <div class="skryteOkno posSkry">
                         <p>Magická sila je atribút útočnej sily postavy spôsobená magickými útokmi</p>
                     </div>
                     <h1>Magická sila</h1>
-                    <button onclick="@ZvysMagUtok" class="tlacitkoP tPriehladne">+</button>
-                    <button onclick="@ZnizMagUtok" class="tlacitkoL tPriehladne">-</button>
+                    <button @onclick="@ZvysMagUtok" class="tlacitkoP tPriehladne">+</button>
+                    <button @onclick="@ZnizMagUtok" class="tlacitkoL tPriehladne">-</button>
                 </div>
                 <div class="statOkno vie">
                     <div class="skryteOkno posSkry">
                         <p>Viera je atribút útočnej a liečivej sili postavy spôsobená modlitbami</p>
                     </div>
                     <h1>Viera</h1>
-                    <button onclick="@ZvysVieru" class="tlacitkoP tPriehladne">+</button>
-                    <button onclick="@ZnizVieru" class="tlacitkoL tPriehladne">-</button>
+                    <button @onclick="@ZvysVieru" class="tlacitkoP tPriehladne">+</button>
+                    <button @onclick="@ZnizVieru" class="tlacitkoL tPriehladne">-</button>
                 </div>
                 <div class="statOkno stam">
                     <div class="skryteOkno posSkry">
                         <p>Stamína je atribút postavy výdrže a odolnosti voči magickým útokom</p>
                     </div>
                     <h1>Stamina</h1>
-                    <button onclick="@ZvysStaminu" class="tlacitkoP tPriehladne">+</button>
-                    <button onclick="@ZnizStaminu" class="tlacitkoL tPriehladne">-</button>
+                    <button @onclick="@ZvysStaminu" class="tlacitkoP tPriehladne">+</button>
+                    <button @onclick="@ZnizStaminu" class="tlacitkoL tPriehladne">-</button>
                 </div>
                 <div class="statOkno vit">
                     <div class="skryteOkno posSkry">
                         <p>Vitalita je atribút postavy života a odolnosti voči fyzickým útokom</p>
                     </div>
                     <h1>Vitalita</h1>
-                    <button onclick="@ZvysVitalitu" class="tlacitkoP tPriehladne">+</button>
-                    <button onclick="@ZnizVitalitu" class="tlacitkoL tPriehladne">-</button>
+                    <button @onclick="@ZvysVitalitu" class="tlacitkoP tPriehladne">+</button>
+                    <button @onclick="@ZnizVitalitu" class="tlacitkoL tPriehladne">-</button>
                 </div>
                 <div class="statOkno sta">
                     <div class="skryteOkno posSkry">
                         <p>Štastie je atribút postavy percentuálnej šance kritického úderu</p>
                     </div>
                     <h1>Šťastie</h1>
-                    <button onclick="@ZvysStastie" class="tlacitkoP tPriehladne">+</button>
-                    <button onclick="@ZnizStastie" class="tlacitkoL tPriehladne">-</button>
+                    <button @onclick="@ZvysStastie" class="tlacitkoP tPriehladne">+</button>
+                    <button @onclick="@ZnizStastie" class="tlacitkoL tPriehladne">-</button>
                 </div>
             </div>
             @*<button type="submit" class="submitUpdate" name="submit">Uloz Zmeny</button>*@
@@ -120,11 +120,11 @@
 }
 
 @code {
-    Fantasia.Shared.Postava? postava = null;
-    Fantasia.Shared.PostavaUpdate? postavaU = new PostavaUpdate();
-    FyzUtoky? fyzUtok = null;
-    MagUtoky? magUtok = null;
-    VieUtoky? vieUtok = null;
+    Fantasia.Shared.Postava postava = new Fantasia.Shared.Postava();
+    PostavaUpdate postavaU = new PostavaUpdate();
+    FyzUtoky fyzUtok = new FyzUtoky();
+    MagUtoky magUtok = new MagUtoky();
+    VieUtoky vieUtok = new VieUtoky();
 
     protected override async Task OnInitializedAsync()
     {
@@ -156,7 +156,7 @@
         }
     }
 
-    async void ZvysFyzUtok()
+    void ZvysFyzUtok()
     {
         if (postavaU.VolneStaty > 0)
         {
@@ -165,16 +165,16 @@
         }
     }
 
-    async void ZnizFyzUtok()
+    void ZnizFyzUtok()
     {
-        if (postavaU.FyzickaSila > 0)
+        if (postavaU.FyzickaSila > 1)
         {
             postavaU.FyzickaSila--;
             postavaU.VolneStaty++;
         }
     }
 
-    async void ZvysMagUtok()
+    void ZvysMagUtok()
     {
         if (postavaU.VolneStaty > 0)
         {
@@ -183,16 +183,16 @@
         }
     }
 
-    async void ZnizMagUtok()
+    void ZnizMagUtok()
     {
-        if (postavaU.MagickaSila > 0)
+        if (postavaU.MagickaSila > 1)
         {
             postavaU.MagickaSila--;
             postavaU.VolneStaty++;
         }
     }
 
-    async void ZvysVieru()
+    void ZvysVieru()
     {
         if (postavaU.VolneStaty > 0)
         {
@@ -201,16 +201,16 @@
         }
     }
 
-    async void ZnizVieru()
+    void ZnizVieru()
     {
-        if (postavaU.Viera > 0)
+        if (postavaU.Viera > 1)
         {
             postavaU.Viera--;
             postavaU.VolneStaty++;
         }
     }
 
-    async void ZvysStaminu()
+    void ZvysStaminu()
     {
         if (postavaU.VolneStaty > 0)
         {
@@ -219,16 +219,16 @@
         }
     }
 
-    async void ZnizStaminu()
+    void ZnizStaminu()
     {
-        if (postavaU.Stamina > 0)
+        if (postavaU.Stamina > 1)
         {
             postavaU.Stamina--;
             postavaU.VolneStaty++;
         }
     }
 
-    async void ZvysVitalitu()
+    void ZvysVitalitu()
     {
         if (postavaU.VolneStaty > 0)
         {
@@ -237,16 +237,16 @@
         }
     }
 
-    async void ZnizVitalitu()
+    void ZnizVitalitu()
     {
-        if (postavaU.Vitalita > 0)
+        if (postavaU.Vitalita > 1)
         {
             postavaU.Vitalita--;
             postavaU.VolneStaty++;
         }
     }
 
-    async void ZvysStastie()
+    void ZvysStastie()
     {
         if (postavaU.VolneStaty > 0)
         {
@@ -255,9 +255,9 @@
         }
     }
 
-    async void ZnizStastie()
+    void ZnizStastie()
     {
-        if (postavaU.Stastie > 0)
+        if (postavaU.Stastie > 1)
         {
             postavaU.Stastie--;
             postavaU.VolneStaty++;

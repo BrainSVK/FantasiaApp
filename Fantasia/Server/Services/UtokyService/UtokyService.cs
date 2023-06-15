@@ -1,9 +1,4 @@
-﻿using Fantasia.Server.Services.AuthService;
-using Fantasia.Server.Data;
-using Fantasia.Shared;
-using Microsoft.EntityFrameworkCore;
-using Stripe;
-
+﻿
 namespace Fantasia.Server.Services.UtokyService
 {
     public class UtokyService : IUtokyService
@@ -19,17 +14,17 @@ namespace Fantasia.Server.Services.UtokyService
 
         public async Task<FyzUtoky> GetFyzUtokByPostavaId(int Id)
         {
-            return await _context.FyzUtoky.FirstOrDefaultAsync(u => u.Id.Equals(Id));
+            return (await _context.FyzUtoky.FirstOrDefaultAsync(u => u.Id.Equals(Id)))!;
         }
 
         public async Task<MagUtoky> GetMagUtokByPostavaId(int Id)
         {
-            return await _context.MagUtoky.FirstOrDefaultAsync(u => u.Id.Equals(Id));
+            return (await _context.MagUtoky.FirstOrDefaultAsync(u => u.Id.Equals(Id)))!;
         }
 
         public async Task<VieUtoky> GetVieUtokByPostavaId(int Id)
         {
-            return await _context.VieUtoky.FirstOrDefaultAsync(u => u.Id.Equals(Id));
+            return (await _context.VieUtoky.FirstOrDefaultAsync(u => u.Id.Equals(Id)))!;
         }
     }
 }

@@ -6,6 +6,7 @@ using System.Text.Json;
 
 namespace Fantasia.Client
 {
+    //pouzil som sa od patrick god z YT
     public class CustomAuthStateProvider : AuthenticationStateProvider
     {
         private readonly ILocalStorageService _localStorageService;
@@ -64,9 +65,9 @@ namespace Fantasia.Client
             var keyValuePairs = JsonSerializer
                 .Deserialize<Dictionary<string, object>>(jsonBytes);
 
-            var claims = keyValuePairs.Select(kvp => new Claim(kvp.Key, kvp.Value.ToString()));
+            var claims = keyValuePairs?.Select(kvp => new Claim(kvp.Key, kvp.Value?.ToString()!));
 
-            return claims;
+            return claims!;
         }
     }
 }

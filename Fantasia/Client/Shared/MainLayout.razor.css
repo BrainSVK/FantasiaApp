@@ -11,6 +11,10 @@
     z-index: 10;
 }
 
+.text-center {
+    text-align: center;
+}
+
 .sidebar {
     z-index: 11;
 }

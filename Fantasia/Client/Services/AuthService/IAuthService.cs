@@ -13,7 +13,6 @@ namespace Fantasia.Client.Services.AuthService
 
         Task<ServiceResponse<HracUpdate>> UpdateHrac(HracUpdate request);
 
-        //Task<ServiceResponse<bool>> ChangePassword(UserChangePassword request);
         Task<bool> IsUserAuthenticated();
     }
 }

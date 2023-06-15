@@ -1,6 +1,4 @@
-﻿using Fantasia.Shared;
-using Stripe;
-
+﻿
 namespace Fantasia.Server.Services.BojService
 {
     public class BojService : IBojService
@@ -45,16 +43,21 @@ namespace Fantasia.Server.Services.BojService
 
             Random rnd = new Random();
 
-            var boj = new Shared.Boj
+            var boj = new Boj();
+
+            if (postava != null)
             {
-                IdPostava = vytvorBoj.Id,
-                Obtiaznost = vytvorBoj.Obtiaznost,
-                MaxZ = postava.Vitalita * 10,
-                AktZ = postava.Vitalita * 10,
-                MaxZNep = vytvorBoj.Obtiaznost * 100,
-                AktZNep = vytvorBoj.Obtiaznost * 100,
-                RandSilaUtok = rnd.Next(vytvorBoj.Obtiaznost * 10 - (int)(vytvorBoj.Obtiaznost*0.2*10), vytvorBoj.Obtiaznost*10 + (int)(vytvorBoj.Obtiaznost * 0.2*10)),
-            };
+                boj = new Shared.Boj
+                {
+                    IdPostava = vytvorBoj.Id,
+                    Obtiaznost = vytvorBoj.Obtiaznost,
+                    MaxZ = postava.Vitalita * 10,
+                    AktZ = postava.Vitalita * 10,
+                    MaxZNep = vytvorBoj.Obtiaznost * 100,
+                    AktZNep = vytvorBoj.Obtiaznost * 100,
+                    RandSilaUtok = rnd.Next(vytvorBoj.Obtiaznost * 10 - (int)(vytvorBoj.Obtiaznost * 0.2 * 10), vytvorBoj.Obtiaznost * 10 + (int)(vytvorBoj.Obtiaznost * 0.2 * 10)),
+                };
+            }
 
             _context.Boj.Add(boj);
             await _context.SaveChangesAsync();

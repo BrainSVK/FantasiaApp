@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
+﻿
 namespace Fantasia.Shared
 {
     public class PostavaUpdate
     {
         public int Id { get; set; }
-        public string Image { get; set; }
+        public string Image { get; set; } = string.Empty;
         public int FyzickaSila { get; set; }
         public int MagickaSila { get; set; }
         public int Viera { get; set; }
